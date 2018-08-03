@@ -3,6 +3,8 @@ package cn.dawnrise.android.coinmachine;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +17,8 @@ import android.view.MenuItem;
 
 public class MainDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Fragment home,linksManage,settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,10 @@ public class MainDrawerActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        home = new FragmentHome();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction().add(R.id.fragment_container,home).addToBackStack("home").commit();
     }
 
     @Override
@@ -80,7 +88,7 @@ public class MainDrawerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+/*        if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
@@ -92,8 +100,23 @@ public class MainDrawerActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
-        }
-
+        }*/
+switch (id){
+    case R.id.nav_home:
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,home).commit();
+        break;
+    case R.id.nav_links:
+        if(null==linksManage)
+            linksManage = new FragmentLinksManage();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,linksManage).addToBackStack("links").commit();
+        break;
+    case R.id.nav_setting:
+        if(null==settings)
+            settings = new FragmentSettings();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,settings).addToBackStack("settings").commit();
+        break;
+    default:
+}
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
