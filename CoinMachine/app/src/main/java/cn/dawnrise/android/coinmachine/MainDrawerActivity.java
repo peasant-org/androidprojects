@@ -18,7 +18,7 @@ import android.view.MenuItem;
 public class MainDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Fragment home,linksManage,settings;
+    private Fragment home,linksManage,settings,links;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +113,12 @@ switch (id){
     case R.id.nav_setting:
         if(null==settings)
             settings = new FragmentSettings();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,settings).addToBackStack("settings").commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,settings).addToBackStack("settings").commit();
+        break;
+    case R.id.nav_links1:
+        if(null==links)
+            links = new LinkFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,links).addToBackStack("links").commit();
         break;
     default:
 }
