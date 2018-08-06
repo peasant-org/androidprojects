@@ -15,11 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
 public class MainDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Fragment home, linksManage, settings;
+    private Fragment home,linksManage,settings,links;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,6 @@ public class MainDrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_main_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //ActivityMainBinding amb=null;
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -49,7 +47,7 @@ public class MainDrawerActivity extends AppCompatActivity
 
         home = new FragmentHome();
         FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().add(R.id.fragment_container, home).addToBackStack("home").commit();
+        fm.beginTransaction().add(R.id.fragment_container,home).addToBackStack("home").commit();
     }
 
     @Override
@@ -103,22 +101,27 @@ public class MainDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }*/
-        switch (id) {
-            case R.id.nav_home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, home).commit();
-                break;
-            case R.id.nav_links:
-                if (null == linksManage)
-                    linksManage = new FragmentLinksManage();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, linksManage).addToBackStack("links").commit();
-                break;
-            case R.id.nav_setting:
-                if (null == settings)
-                    settings = new FragmentSettings();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, settings).addToBackStack("settings").commit();
-                break;
-            default:
-        }
+switch (id){
+    case R.id.nav_home:
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,home).commit();
+        break;
+    case R.id.nav_links:
+        if(null==linksManage)
+            linksManage = new FragmentLinksManage();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,linksManage).addToBackStack("links").commit();
+        break;
+    case R.id.nav_setting:
+        if(null==settings)
+            settings = new FragmentSettings();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,settings).addToBackStack("settings").commit();
+        break;
+    case R.id.nav_links1:
+        if(null==links)
+            links = new LinkFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,links).addToBackStack("links").commit();
+        break;
+    default:
+}
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
