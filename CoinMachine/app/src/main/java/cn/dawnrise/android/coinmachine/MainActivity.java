@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String logTag = "Coin";
 
-    Thread at;
+    AccessThread at;
     public final static Set<String> mobiletypes = new HashSet<>();
     public final static Set<String> defaultUrls = new ArraySet<>();
     final static String[] androidVersion = {"Linux; Android 5.0", "Linux; Android 5.1", "Linux; Android 6.0", "Linux; Android 6.1", "Linux; Android 7.0", "Linux; Android 7.1.1", "Linux; Android 8.0"};
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (at != null && !at.isInterrupted()) {
                     Log.i(logTag, "请等待，正在停止挖矿主线程……");
-                    at.interrupt();
+                    at.makeStop();
                 }
             }
         });
@@ -295,9 +295,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            super.run();
-            stopflag = false;
-            for (int i = 0; i < times; i++) {
+
+            for (int i = 0; i < times && !stopflag; i++) {
                 if (stopflag) {
                     break;//跳出循环
                 }
@@ -384,64 +383,70 @@ public class MainActivity extends AppCompatActivity {
                         });
 
 
-                        int t = rd2.nextInt(2) + 1;
+                        int t = rd2.nextInt(2) + 1;//访问1至3个Url，随机
 
-                        for (int j = 0; j < t; j++) {
-                            if (stopflag)
-                                break;
-                            final String url = mUrls[rd.nextInt(mUrls.length - 1)];
+                        for (int j = 0; j < t && !stopflag; j++) {//主循环线程未终止，且访问次数未足
+
+                            final String url = mUrls[rd3.nextInt(mUrls.length - 1)];
                             final String finalF_ua = f_ua;
                             try {
                                 h.post(new Runnable() {//在UI线程调用WebView
                                     @Override
                                     public void run() {
-                                        webView.clearHistory();
-                                        webView.clearCache(false);
+                                       // webView.clearHistory();
+
+                                       // webView.clearCache(false);
                                         webView.getSettings().setUserAgentString(finalF_ua);
                                         webView.loadUrl(url);
                                         Log.i(logTag, "访问：" + url);
-                                        h.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Toast.makeText(mContext, "访问：" + url, Toast.LENGTH_LONG).show();
-                                            }
-                                        });
+                                        Toast.makeText(mContext, "访问：" + url, Toast.LENGTH_LONG).show();
+                                        webView.pageDown(true);
+
+
                                     }
                                 });
-                                sleep(rd3.nextInt(300000) + 60 * 000);
+                                sleep(rd3.nextInt(300*1000) + 60 * 000);
 
                             } catch (InterruptedException e) {
+
                                 e.printStackTrace();
+
                             }
 
                         }
 
+                        AccessThread.this.interrupt();//唤醒AccessThread线程
+
                     }
                 });
-
-
                 try {
-                    switch (rd2.nextInt(30)) {
+                    sleep(1800*1000);//等待访问URL子线程唤醒
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                try{
+                    switch (rd2.nextInt(30)) {//随机休眠一定时间
 
                         case 0:
-                            sleep(rd.nextInt(600) * 1000 + 1200 * 1000);//中间隔20至30分钟
+                            sleep(rd.nextInt(600) * 1000 + 600 * 1000);//中间隔10至20分钟
 
                         case 1:
-                            sleep(rd.nextInt(3600) * 1000 + 1800 * 1000);//大间隔30分至1.5小时
+                            sleep(rd.nextInt(2400) * 1000 + 1200 * 1000);//大间隔20分至1小时
 
                         default:
-                            sleep(rd.nextInt(600) * 1000 + 120 * 1000);//小间隔
+                            sleep(rd.nextInt(480) * 1000 + 120 * 1000);//小间隔2分钟至10分钟
 
                     }
 
                 } catch (InterruptedException e) {
-                    makeStop();//被中断了，则终止线程
                     e.printStackTrace();
-                    break;
                 }
 
-            }
-            stopflag = true;
+            }//for
+
+
             Log.i(logTag, "挖矿主线程停止!!!");
             h.post(new Runnable() {
                 @Override
@@ -450,7 +455,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-        }
+        }//run()
     }
 
     static class TaskProgress extends AsyncTask<String, String, String> {
