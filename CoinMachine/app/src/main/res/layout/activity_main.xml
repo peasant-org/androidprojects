@@ -13,29 +13,33 @@
 
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/navigation">
-<LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent">
 
-    <Button
-        android:id="@+id/drawer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="DrawerUI" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btn_phones"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:text="Phones" />
+            <Button
+                android:id="@+id/drawer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="DrawerUI" />
 
-    <Button
-        android:id="@+id/btn_links"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:text="Links" />
-</LinearLayout>
+            <Button
+                android:id="@+id/btn_phones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Phones" />
+
+            <Button
+                android:id="@+id/btn_links"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Links" />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

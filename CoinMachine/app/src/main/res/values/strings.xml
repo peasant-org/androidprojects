@@ -11,4 +11,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main_drawer">MainDrawerActivity</string>
+    <string name="urls_input_hint">Http链接，以换行符分割</string>
+    <string name="phones_hint">手机类型，以\",\"分隔</string>
 </resources>

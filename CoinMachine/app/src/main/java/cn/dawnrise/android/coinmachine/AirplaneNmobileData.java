@@ -28,7 +28,7 @@ import java.util.Enumeration;
 
 
 */
-public class MobileData {
+public class AirplaneNmobileData {
 
     private final static String COMMAND_AIRPLANE_ON = "settings put global airplane_mode_on 1 \n " +
             "am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true\n ";
