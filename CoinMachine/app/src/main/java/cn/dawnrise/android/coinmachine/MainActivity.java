@@ -115,11 +115,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Set<String> urls = config.getStringSet(URLS, defaultUrls);
                 Set<String> phones = config.getStringSet(PHONES, mobiletypes);
-                if (at == null) {
-                    at = new AccessThread(webView, 1000, MainActivity.this, phones.toArray(new String[0]), urls.toArray(new String[0]));
+                if (at == null || !at.isAlive()) {
 
+                    at = new AccessThread(webView, 1000, MainActivity.this, phones.toArray(new String[0]), urls.toArray(new String[0]));
+                    at.start();
+                    Toast.makeText(getApplicationContext(), "请等待，正在开始挖矿主线程……", Toast.LENGTH_LONG).show();
+
+                }else{
+                    Toast.makeText(getApplicationContext(), "挖矿主线程已经在运行！！！", Toast.LENGTH_LONG).show();
                 }
-                at.start();
+
+
 
             }
         });
@@ -130,8 +136,11 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {//关闭线程
             @Override
             public void onClick(View view) {
-                if (at != null && !at.isInterrupted()) {
+                if (at != null) {
                     Log.i(logTag, "请等待，正在停止挖矿主线程……");
+
+                    Toast.makeText(getApplicationContext(), "请等待，正在停止挖矿主线程……", Toast.LENGTH_LONG).show();
+
                     at.makeStop();
                 }
             }
